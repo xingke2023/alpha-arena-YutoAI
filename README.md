@@ -1,108 +1,161 @@
-# NOF0 - 开箱即用的Agentic Trading项目
+# Alpha Arena · YutoAI — 简单好用的 AI 量化交易竞技平台
 
-> **终极目标**: 完整复刻 [NOF1.ai](https://nof1.ai) Alpha Arena，打造开源的AI交易竞技平台
+> **愿景**：开源复刻 NOF1.ai“Alpha Arena”的核心体验，让任何人都能一键搭建自己的 **AI 交易对抗擂台**，用 **真实数据 + 清晰可视化** 回答一个朴素问题：**“哪个模型更会赚钱？”**
+>
+> **重要提示**：本项目仅用于 **研究与教育**，**不构成投资建议**，与 NOF1 官方无关。请在合规前提下使用。
 
-让 AI + Crypto 走向大众视野：用真实数据和清晰可视化，回答"哪个模型更会赚"的朴素问题。
+---
 
+## 🚀 项目简介
 
-## 项目简介
+**Alpha Arena · YutoAI** 是一个让 **多个 AI 模型** 在 **加密货币市场** 中进行 **实时对抗** 的开源平台。
+每个模型获得相同的初始资金与数据输入，独立做出开平仓决策；平台以 **排行榜、资产曲线、持仓与成交** 等视图，实时展示各模型的盈亏与风控表现。
 
-NOF0 是一个让多个AI模型在真实加密货币市场中进行交易竞赛的平台。每个AI从$10,000起步，实时展示谁赚的多、谁亏的惨。本项目复刻 nof1.ai 的完整功能，让任何人都能部署自己的AI交易竞技场。
+灵感源自社区正在流行的“Alpha Arena 实盘实验”（多个主流大模型各 $10,000、实时对战）。
 
-## 项目愿景
+---
 
-### 终极目标
-完整开源复刻 [NOF1.ai](https://nof1.ai) Alpha Arena
+## 🎯 目标与当前进度
 
-### 当前进度
+* **终极目标**：
 
-- 前端：100%（可独立运行，不依赖后端）
-- 后端：20%
-- AI Agent：0%
+  * 完整开源复刻 Alpha Arena 的核心功能与观感：**统一规则、清晰风控、实时看板、可复现实验**。
 
-## 项目结构
+* **当前进度**（持续迭代中）：
+
+  * 前端：**100%**（可独立运行，不依赖后端）
+  * 后端：**20%**（基础 REST 端点已通，持续扩展中）
+  * AI Agent：**0%**（规划中：策略接口、评测与回测/实盘联动）
+
+> 注：如你更关注“评测与实盘可落地”的整链路方案，可在本项目基础上逐步完善风控、撮合与对接实盘路径。
+
+---
+
+## 🧱 项目结构
 
 ```
-nof0/
-├── web/          # [前端] Next.js + React + Recharts
-├── go/           # [后端] Go-Zero + REST API
-├── mcp/          # [MCP数据] MCP浏览器截图、JSON静态数据等
-└── agents/       # [AI引擎] (规划中)
+yutoai/
+├── web/          # 前端：Next.js + React + TypeScript + Recharts
+├── go/           # 后端：Go-Zero + REST API（开发中）
+├── mcp/          # 数据快照/MCP：浏览器截图、JSON 静态数据等
+└── agents/       # AI 引擎（规划中）：策略/风控/调度/回测接口
 ```
 
-## 快速开始
+### 前端（web/）
 
-### 启动前端
+* **框架**：Next.js 15、React 19、TypeScript 5
+* **图表**：Recharts（自定义图例、末端标记）
+* **状态**：Zustand
+* **主题**：CSS Variables（如 `--panel-bg`、`--muted-text`、`--axis-tick`），避免 SSR/CSR 水合差异
+* **工程约定**：
+
+  * `src/lib/model/meta.ts` 统一设置品牌色与白底版 Logo
+  * 参见 `web/docs/theme.md` 的主题规范（尽量避免显式 `isDark` 分支）
+
+### 后端（go/）
+
+* **框架**：Go-Zero
+* **现状**：已提供若干 REST 端点、响应延迟目标 < 10ms；测试覆盖率目标 > 80%（持续补齐）
+* 详见 `go/README.md`（接口、配置与路由说明）
+
+---
+
+## ⚡ 快速开始
+
+### 1) 启动前端（独立可跑）
 
 ```bash
 cd web
 npm install
 npm run dev
+# 访问 http://localhost:3000
 ```
 
-访问 `http://localhost:3000`
+**前端主要功能**
 
-**前端核心特性**:
-- 账户总资产曲线
-- 持仓情况
-- 成交纪录
-- 模型对话（Model Chat）
-- 排行榜
-- 模型详情
+* 账户总资产曲线（Since Inception 与区间视图）
+* 实时/历史 **持仓** 与 **成交记录**
+* **排行榜** 与模型详情页
+* **模型对话（Model Chat）**：用于记录与展示模型的“思考/解释”对话流
+* 轻量 **数据快照浏览**
 
-### 启动后端
+### 2) 启动后端（可选，开发中）
 
 ```bash
 cd go
-go build -o nof0-api ./nof0.go
-./nof0-api -f etc/nof0.yaml
+go build -o yutoai-api ./nof0.go
+./yutoai-api -f etc/nof0.yaml
+# 服务默认运行在 http://localhost:8888
 ```
 
-服务运行在 `http://localhost:8888`
+> 具体路由、环境变量与依赖，参见 `go/README.md`。
 
-完整后端文档见 [go/README.md](go/README.md)
+---
 
-## 技术栈
+## 🗂️ 数据快照工具（可离线浏览）
 
-### 前端 (web/)
-- **框架**: Next.js 15 + React 19 + TypeScript
-- **图表**: Recharts（自定义图例与末端标记）
-- **状态**: Zustand
-- **样式**: CSS Variables 主题系统（避免SSR/CSR水合差异）
-- **状态**: 开发完毕
-
-**技术亮点**:
-- 在 `src/lib/model/meta.ts` 统一配置品牌色与白色版 Logo
-- `globals.css` 使用 CSS 变量驱动主题（`--panel-bg`、`--muted-text`、`--axis-tick` 等）
-- 开发规范：参考 `web/docs/theme.md`，避免 `isDark` 分支判断
-
-### 后端 (go/)
-- **框架**: Go-Zero 微服务框架
-- **特性**: 7个REST端点、88%测试覆盖、响应时间 <10ms
-- **状态**: 开发中
-
-详细文档见 [go/README.md](go/README.md)
-
-## 数据快照工具
-
-一键下载 nof1.ai 的上游接口原始数据，离线保存：
+一键抓取上游接口的公开数据做本地快照，便于 **离线演示/复盘**：
 
 ```bash
 cd web
 npm run snapshot:nof1
 ```
 
-**生成内容**:
-- 生成目录：`snapshots/nof1/<ISO时间戳>/*.json` 与 `index.json`
-- 已包含：crypto-prices、positions、trades、account-totals、since-inception-values、leaderboard、analytics、conversations
-- 默认不提交到仓库（见 `.gitignore`）
+* 生成目录：`snapshots/nof1/<ISO时间戳>/*.{json,png}` 与 `index.json`
+* 已覆盖：`crypto-prices`、`positions`、`trades`、`account-totals`、`since-inception-values`、`leaderboard`、`analytics`、`conversations`
+* `.gitignore` 已默认忽略快照内容，避免误提交
 
-## 相关资源
+> 快照数据仅用于演示/研究；线上实时信息以官方页面为准。
 
-- [NOF1 官方网站](https://nof1.ai/)
-- [后端完整文档](go/README.md)
-- [Go-Zero框架](https://go-zero.dev/)
+---
 
-## 许可证
+## 🧩 路线图（Roadmap）
 
-MIT License
+* [ ] **Agent 接口**：统一 JSON 决策 schema（开仓/加仓/止盈/止损/风控）
+* [ ] **交易适配**：优先支持 **Paper Trading**，预留对接特定交易所现货/永续接口
+* [ ] **风控与指标**：回撤、胜率、盈亏比、最大不利变动（MAE）、资金利用率等
+* [ ] **调度与节奏**：固定评测周期（如 5min bar），统一撮合与滑点假设
+* [ ] **看板**：更丰富的实时流、风险敞口与归因分析
+* [ ] **回测/复盘**：统一数据口径与可重复实验脚手架
+
+---
+
+## 🤝 贡献指南
+
+欢迎提交 PR / Issue：
+
+* **Bug 修复**：请附复现步骤与环境信息
+* **新功能**：建议先开 Issue 讨论接口与数据结构
+* **文档**：欢迎补充部署脚本、Docker 化与常见问题
+
+---
+
+## 🔐 合规与免责声明
+
+* 本项目仅用于 **研究与教育**，**不构成投资建议**；任何实盘风险由使用者自行承担。
+* 请遵守当地法律法规及交易所条款，确保数据采集与使用的合规性。
+* 本项目与 NOF1 官方 **无从属关系**；如引用公共数据或页面，请以官方口径为准。
+
+---
+
+## 📚 参考 / 灵感
+
+* NOF1 · Alpha Arena（官方首页/排行榜）
+* AlphaArena-Live（第三方实时追踪，社区可视化看板）
+* 多篇媒体与社区复盘文章（用于理解实验边界与指标口径）
+
+---
+
+## 📄 许可证
+
+MIT License（详见 `LICENSE`）
+
+---
+
+### FAQ（可选，发版时可打开）
+
+* **Q：能直接实盘吗？**
+  A：当前定位是 **研究与可视化**，建议先用 **Paper Trading** 与“沙箱/小额”演练，逐步对接实盘并完善风控。
+
+* **Q：为什么我的曲线与某些看板不同？**
+  A：评测粒度、撮合规则、滑点假设、手续费口径等差异都会造成偏差。请在 Roadmap 中统一这些设置，并在 README 标注你的口径。
